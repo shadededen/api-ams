@@ -39,8 +39,31 @@
         }
         function atualizarTabela()
         {
+            var url = "http:///localhost/api-ams/rotas/materias.php"
+            fetch(url)
+            .then(resposta => resposta.json())
+            .then(dados=>{
+                console.log(dados)
+                dados.map((valor, indice)=>{
+                    var tr = document.createElement("tr")
+
+                    var td_Id = document.createElement("td")
+                    td_Id.innerText = valor.id
+
+                    var td_Nome = document.createElement("td")
+                    td_Nome.innerText = valor.Nome
+
+                    var td_Disponivel = document.createElement("td")
+                    td_Disponivel.innerText = valor.td_Disponivel
+
+                    tr.append(td_Id)
+                    tr.append(td_Nome)
+                    tr.append(td_Disponivel)
+                })
+            })
 
         }
+        atualizarTabela()
     </script>
 </body>
 </html>
