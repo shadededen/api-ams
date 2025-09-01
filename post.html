@@ -15,6 +15,9 @@
             <th>Nome</th>
             <th>Disponivel</th>
         </thead>
+        <tbody id="corpoTabela">
+
+        </tbody>
         <tbody>
 
         </tbody>
@@ -24,8 +27,8 @@
     <input type="text" name="materia" id="materia" />
     <br />
     <br />
-    <label for="disponivel" >Disponível para lecionar?</label>
-    <select name="Disponivel" id="disponivel">
+    <label for="Disponivel" >Disponível para lecionar?</label>
+    <select name="Disponivel" id="Disponivel">
         <option value="1">Sim</option>
         <option value="0">Não</option>
     </select>
@@ -48,17 +51,21 @@
                     var tr = document.createElement("tr")
 
                     var td_Id = document.createElement("td")
-                    td_Id.innerText = valor.id
+                    td_Id.innerText = valor.Id
 
-                    var td_Nome = document.createElement("td")
-                    td_Nome.innerText = valor.Nome
+                    var td_Materia = document.createElement("td")
+                    td_Materia.innerText = valor.Materia
 
                     var td_Disponivel = document.createElement("td")
-                    td_Disponivel.innerText = valor.td_Disponivel
+                    td_Disponivel.innerText = valor.Disponivel
 
                     tr.append(td_Id)
-                    tr.append(td_Nome)
+                    tr.append(td_Materia)
                     tr.append(td_Disponivel)
+
+                    var tabela =document.getElementById("corpoTabela")
+                    tabela.appendChild(tr)
+
                 })
             })
 
