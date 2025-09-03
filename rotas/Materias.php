@@ -9,25 +9,39 @@ $id = $_GET['id'] ?? NULL;
 switch($metodoSolicitado){
     case "POST":
         $dados_recebidos = json_decode(file_get_contents("php://input"), true);
-        break;
-    case "GET":
-        $servidor = "localhost";
-        $usuario = "root";
-        $senha = "";
-        $banco = "aula_pw3";
+        $nome_materia = $dados_recebidos['Materia'] ?? null;
+        $disponivel = $dados_recebidos['Disponivel'] ?? null;
 
-        $conexao = new mysqli($servidor, $usuario, $senha, $banco);
+            if ($nome_materia && $disponivel) {
+                $servidor = "localhost"; 
+                $usuario = "root"; 
+                $senha = ""; 
+                $banco = "aula_pw3";
 
-        $sql = "select * from materias";
+                $conexao = new mysqli($servidor, $usuario, $senha, $banco);
 
-        $resultado = $conexao->query($sql);
+                if ($conexao->connect_error) {
+                    http_response_code(500);
+                    echo json_encode(["erro" => "Falha na conexão: " . $conexao->connect_error]);
+                    exit;
+                }
 
-        $materias = [];
-        while($linha = $resultado->fetch_assoc()){
-            $materias[]=$linha;
-        }
+                $stmt = $conexao->prepare("INSERT INTO Materias (Materia, Disponivel) VALUES (?, ?)");
+                $stmt->bind_param("ss", $nome_materia, $disponivel);
 
-        echo json_encode($materias);
+                if ($stmt->execute()) {
+                    echo json_encode(["mensagem" => "Matéria inserida com sucesso"]);
+                } else {
+                    http_response_code(500);
+                    echo json_encode(["erro" => "Erro ao inserir: " . $stmt->error]);
+                }
+
+                $stmt->close();
+                $conexao->close();
+                echo json_encode($dados_recebidos)
+            }else{
+                echo json_encode("{'erro':'dados inválidos'}")
+            }
         break;    
 }
 
