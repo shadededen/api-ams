@@ -30,10 +30,10 @@ switch($metodoSolicitado){
                 $stmt->bind_param("ss", $nome_materia, $disponivel);
 
                 if ($stmt->execute()) {
-                   // echo json_encode(["mensagem" => "Matéria inserida com sucesso"]);
+                    
                 } else {
                     http_response_code(500);
-                    //echo json_encode(["erro" => "Erro ao inserir: " . $stmt->error]);
+                    
                 }
 
                 $stmt->close();
@@ -42,6 +42,25 @@ switch($metodoSolicitado){
             }else{
                 echo json_encode("{'erro':'dados inválidos'}");
             }
+        break;
+case "GET":
+         
+        $servidor = "localhost"; 
+        $usuario = "root"; 
+        $senha = ""; 
+        $banco = "aula_pw3";
+
+        $conexao = new mysqli($servidor, $usuario, $senha, $banco);
+
+        $sql = "Select * from Materias";
+
+        $resultado = $conexao->query($sql);
+
+        $materias = [];
+        while ($linha = $resultado->fetch_assoc()) {
+            $materias[] = $linha;
+        }
+        echo json_encode($materias);
         break;    
 }
 

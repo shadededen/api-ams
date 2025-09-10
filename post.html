@@ -41,65 +41,85 @@
 
             var materia = document.getElementById("materia")
             var disponivel = document.getElementById("disponivel")
-            
             console.log(JSON.stringify({
                                 "Materia" : materia.value ,
                                 "Disponivel" : disponivel.value
                             }))
-            
-
+           
             fetch('http://localhost/api-ams/rotas/materias.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-                body: JSON.stringify({
-                    "Materia": materia.value,
-                    "Disponivel" : disponivel.value
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                atualizarTabela()
-                materia.value = ""
-            })
-            .catch(error => {
-                console.error("Erro ao enviar requisição:", error);
-                alert("Erro: "+error)
-            });
-
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                            body: JSON.stringify({
+                                "Materia" : materia.value ,
+                                "Disponivel" : disponivel.value
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                            atualizarTabela()
+                            materia.value = ""
+                        })
+                        .catch(error => {
+                            console.error("Erro ao enviar requisição:", error);
+                            alert("Erro: "+error)
+                        });
+                      
         }
         function atualizarTabela()
         {
-            var url = "http:///localhost/api-ams/rotas/materias.php"
+            var url = "http://localhost/api-ams/rotas/materias.php"
             fetch(url)
             .then(resposta => resposta.json())
-            .then(dados=>{
+            .then(dados =>{
                 console.log(dados)
-                var tabela = document.getElementById("corpoTabela")
-
+                 var tabela = document.getElementById("corpoTabela")
+                 tabela.innerHTML = "";
                 dados.map((valor, indice)=>{
-                    var tr = document.createElement("tr")
 
+                    var tr = document.createElement("tr")
+                    
                     var td_Id = document.createElement("td")
                     td_Id.innerText = valor.Id
 
-                    var td_Materia = document.createElement("td")
-                    td_Materia.innerText = valor.Materia
+                    var td_Nome = document.createElement("td")
+                    td_Nome.innerText = valor.Materia
 
                     var td_Disponivel = document.createElement("td")
                     td_Disponivel.innerText = valor.Disponivel
 
+                    let botaoExcluir = document.createElement("button")
+                    botaoExcluir.innerText = "Excluir"
+                    botaoEditar.addEventListener("click",function() {
+                        fetch("http://localhost/api-ams/rotas/materias.php",{
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                            body: JSON.stringify({
+                                "Id_Materia" : valor.Id
+                            })
+                        })
+                        .then(resp => resp.json())
+                        .then(data => {
+                            alert("Excluido com sucesso!")
+
+                        })                        
+                    })
+
                     tr.append(td_Id)
-                    tr.append(td_Materia)
+                    tr.append(td_Nome)
                     tr.append(td_Disponivel)
 
+                   
+                  
                     tabela.appendChild(tr)
 
                 })
-            })
 
+            })
         }
         atualizarTabela()
     </script>
